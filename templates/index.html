@@ -1,7 +1,9 @@
 <html>
-<!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"/-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"/>
 <style type="text/css">
     {% include "stylesheet.css" %}
+
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm//vega@3.3.1"></script>
 <script src="https://cdn.jsdelivr.net/npm//vega-lite@2.4.3"></script>
@@ -29,16 +31,19 @@
             {% endif %}
 
             <div>
-                {% if graph_data.0 is defined %}
-                {% endif %}
+                {% if graph_data[0] is defined %}
+                    {% if graph_data[0].type == 'figur' %}
+                        <div id="vis0" class="graph"></div>
+                        <script type="text/javascript">
+                            vegaEmbed("#vis0", {{ graph_data[0].data | safe}}, {
+                                "actions": false
+                            }).catch(error => showError(el, error));
+                        </script>
+                    {% else %}
+                        {{ graph_data[0].data | safe }}
+                    {% endif %}
 
-                <div id="vis0" class="graph"></div>
-                <script type="text/javascript">
-                    vegaEmbed("#vis0", {{ graph_data[0].data | safe}}, {
-                        "mode": "vega-lite",
-                        "actions": false
-                    }).catch(error => showError(el, error));
-                </script>
+                {% endif %}
 
 
             </div>
@@ -57,6 +62,25 @@
             {% else %}
                 {{ text[1] }}
             {% endif %}
+
+            <div>
+                {% if graph_data[1] is defined %}
+                    {% if graph_data[1].type == 'figur' %}
+                        <div id="vis1" class="graph"></div>
+                        <script type="text/javascript">
+                            vegaEmbed("#vis1", {{ graph_data[1].data | safe}}, {
+                                "actions": false
+                            }).catch(error => showError(el, error));
+                        </script>
+                    {% else %}
+                        {{ graph_data[1].data | safe }}
+                    {% endif %}
+
+                {% endif %}
+
+
+            </div>
+
         </div>
 
 
@@ -83,9 +107,9 @@
 
 <section class="section">
     <div class="container">
-      <footer class="footer">
-          <hr>
-          <span class="no-print fadeshow_1">
+        <footer class="footer">
+            <hr>
+            <span class="no-print fadeshow_1">
               <svg class="icon_dark" style="width: 200px">
                   <path id="ballon-path" fill="none" stroke="transparent" stroke-miterlimit="10"
                         d="M62.9,6.9c-1.4-0.4-2.8-0.8-4.2-1.2C50.7,3.2,42,1.4,32.8,0.7c-8.2-0.6-16.5-0.1-24,1.8C5,3.5,0.5,4.9,0.5,7.3c0,4,16.2,9.4,34.8,7.1C62.2,11.2,64.3,2.1,95.8,1.6c8.3-0.1,17-0.1,25.1,1c4.1,0.6,9.8,1.6,10.6,4.1c1.9,5.8-20.8,5.5-27.5,5.6c-6.3,0.1-12.6-0.2-18.8-0.8C77.2,10.6,69.9,8.9,62.9,6.9z"/>
@@ -111,11 +135,10 @@
                   <path d="M39.2,6.4c0,0,6.5,24.3,0.3,38.8c5.8-2.8,12.8-1.9,17.7,2.3C57.2,47.4,55.6,26.6,39.2,6.4z"/>
               </svg>
           </span>
-      </footer>
+        </footer>
 
-</div>
+    </div>
 </section>
-
 
 
 <script> <!-- PROGRESS BAR -->
