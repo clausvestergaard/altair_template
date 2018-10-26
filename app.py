@@ -6,6 +6,8 @@ from wtforms.fields import SubmitField
 import markdown
 from flask import Markup
 
+from flask import request
+
 import os
 import json
 
@@ -30,36 +32,37 @@ PageDown(app)
 
 
 class PageDownFormExample(FlaskForm):
-    tekstfelt1 = PageDownField('Enter your markdown')
-    tekstfelt2 = PageDownField('Enter your markdown')
-    konklusion = PageDownField('Angiv eventuel konklusion')
-
+    textfield = PageDownField('Enter your markdown')
     submit = SubmitField('Submit')
+
+class PageDownFormSubmit(FlaskForm):
+    submit = SubmitField('Submit')
+
+
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    form = PageDownFormExample()
+    formsubmit = PageDownFormSubmit()
+    form = {f'form{i}': PageDownFormExample(f'form{i}') for i in range(len(import_data()))}
+
     graph_data = import_data()
+    for i in range(len(graph_data)):
+        form[f'form{i}'].textfield.name = f'textfield_{i}'
     data = None
-    text = None
+    text = []
     konklusion = None
 
-    if form.validate_on_submit():
-        data = form
-        text = [Markup(markdown.markdown(data.tekstfelt1.data)),
-                Markup(markdown.markdown(data.tekstfelt2.data))]
-        konklusion = Markup(markdown.markdown(data.konklusion.data))
-    else:
+    if formsubmit.validate_on_submit():
 
-        form.tekstfelt1.data = ('# This is demo #1 of Flask-PageDown\n'
-                                '**Markdown** is rendered on the fly in the '
-                                '<i>preview area below</i>!')
-        form.tekstfelt2.data = ('# This is demo #2 of Flask-PageDown\nThe '
-                                '*preview* is rendered separately from the '
-                                '*input*, and in this case it is located above.')
-        form.konklusion.data = ('Skriv din *konklusion*')
-    return render_template('index.html', form=form, data=data, graph_data=graph_data, text=text, konklusion=konklusion)
+        for i in range(len(graph_data)):
+                data = form
+                text.append(Markup(markdown.markdown(data[f'form{i}'].textfield.data)))
+    else:
+        for i in range(len(graph_data)):
+            form[f'form{i}'].textfield.data = (f'form{i}')
+
+    return render_template('index_ite.html', form=form, data=data, graph_data=graph_data, text=text, konklusion=konklusion, formsubmit=formsubmit)
 
 
 if __name__ == '__main__':
