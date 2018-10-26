@@ -1,0 +1,1 @@
+Generér HTML-filer indeholdende tabeller formateret i HTML og/eller figurer fra Altair eksporteret til json. 

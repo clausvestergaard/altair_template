@@ -1,0 +1,87 @@
+html {
+    font-family: "Georgia", serif;
+}
+
+@media print {
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .fadeshow_1, .fadeshow_1 * {
+        display: none !important;
+    }
+}
+
+.table_overflow {
+    overflow-x: auto;
+    height: 500px;
+    overflow-y: scroll;
+}
+
+.table.is-hoverable.is-striped tbody tr:not(.is-selected):hover {
+    background-color: #d5edfa;
+    color: #052951;
+}
+
+.table.is-hoverable tbody tr:not(.is-selected):hover {
+    background-color: #d5edfa;
+    color: #052951;
+}
+
+.footer {
+    background-color: white;
+    text-emphasis-color: #052951;
+    color: #052951;
+    text-align: left;
+}
+
+.icon_dark {
+    fill: #052951;
+    display: inline-block;
+    width: 150px;
+    position: relative;
+}
+
+.title:not(:last-child) {
+    font-family: "Georgia", serif;
+    color: #052951;
+    margin-bottom: 2.5rem;
+    margin-top: 2.5rem;
+}
+
+.subtitle {
+    font-family: "Georgia", serif;
+    margin-top: 30px;
+    color: #052951;
+}
+
+.figtitle {
+    font-family: "Georgia", serif;
+    margin-top: 16px;
+    color: #052951;
+}
+
+.progress-container {
+    width: 100%;
+    height: 4px;
+    background: #ccc;
+    position: fixed;
+    top: 1;
+    margin-bottom: 0;
+    z-index: 999;
+}
+
+.progress-bar {
+    height: 4px;
+    background: #052951;
+    width: 0%;
+    margin-bottom: 0;
+}
+
+.comment_input_box {
+    width: 300px;
+    height: 100px;
+}
+
