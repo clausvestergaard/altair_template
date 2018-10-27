@@ -47,11 +47,12 @@
             {% else %}
                 {{ konklusion }}
             {% endif %}
-        </div>
 
-        {% if not form.is_submitted() %}
-            <div>{{ form.submit() }}</div>
-        {% endif %}
+
+            {% if not form.is_submitted() %}
+                {{ form.submit() }}
+            {% endif %}
+        </div>
     </form>
 
 
