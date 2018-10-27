@@ -39,7 +39,7 @@ PageDown(app)
 def build_form(data_json):
     class DynamicForm(FlaskForm):
         submit = SubmitField('Submit')
-        konklusion = PageDownField('Konklusion')
+        conclusion = PageDownField('Conclusion')
         pass
 
     d = DynamicForm
@@ -58,17 +58,17 @@ def index():
     form_fields = [f'form{i}' for i in range(len(graph_data))]
     form = build_form(form_fields)
     text = None
-    konklusion = None
+    conclusion = None
 
     if form.validate_on_submit():
         text = []
         for i in range(len(graph_data)):
             text.append(Markup(markdown(form[f'form{i}'].data)))
-        konklusion = Markup(markdown(form.konklusion.data))
+        conclusion = Markup(markdown(form.conclusion.data))
     else:
         for i in form_fields:
             form[i].data = ('Write text in **markdown**')
-    return render_template('index.html', form=form, graph_data=graph_data, text=text, konklusion=konklusion,
+    return render_template('index.html', form=form, graph_data=graph_data, text=text, conclusion=conclusion,
                            form_fields=form_fields)
 
 
