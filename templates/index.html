@@ -2,104 +2,60 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"/>
 <style type="text/css">
     {% include "stylesheet.css" %}
-
-
 </style>
+
 <script src="https://cdn.jsdelivr.net/npm//vega@3.3.1"></script>
 <script src="https://cdn.jsdelivr.net/npm//vega-lite@2.4.3"></script>
 <script src="https://cdn.jsdelivr.net/npm//vega-embed@3.11"></script>
 
 {{ pagedown.include_pagedown() }}
-<body>
 
+<body>
 <div style="width: 500px;">
 
     <form method="POST">
+
         {{ form.hidden_tag() }}
 
-
-        <!-- TEKSTFELT 1 -->
         <div>
-            {%  if not form.is_submitted() %}
-                <b>{{ form.form0.label }}</b>:
-                {{ form.form0(rows=10, style='width:100%') }}
-            {% else %}
-                {{ text[0] }}
-            {% endif %}
 
-            <div>
-                {% if graph_data[0] is defined %}
-                    {% if graph_data[0].type == 'figur' %}
-                        <div id="vis0" class="graph"></div>
+            {% for i in form_fields %}
+                {% if not form.is_submitted() %}
+                    {{ form[i](rows=10, style='width:100%') }}
+                {% else %}
+                    {{ text[loop.index0] }}
+                {% endif %}
+
+
+                {% if graph_data[loop.index0] is defined %}
+                    {% if graph_data[loop.index0].type == 'figur' %}
+                        <div id="vis{{ loop.index0 }}" class="graph"></div>
                         <script type="text/javascript">
-                            vegaEmbed("#vis0", {{ graph_data[0].data | safe}}, {
+                            vegaEmbed("#vis{{ loop.index0 }}", {{ graph_data[loop.index0].data | safe}}, {
                                 "actions": false
                             }).catch(error => showError(el, error));
                         </script>
                     {% else %}
-                        {{ graph_data[0].data | safe }}
+                        {{ graph_data[loop.index0].data | safe }}
                     {% endif %}
-
                 {% endif %}
+                <br>
+            {% endfor %}
 
-
-            </div>
-
-        </div>
-
-        {{ form.hidden_tag() }}
-
-
-        <!-- TEKSTFELT 1 -->
-        <div>
-            {%  if not form.is_submitted() %}
-                <b>{{ form.form1.label }}</b>:
-                {{ form.form1(rows=10, style='width:100%') }}
-            {% else %}
-                {{ text[1] }}
-            {% endif %}
-
-            <div>
-                {% if graph_data[1] is defined %}
-                    {% if graph_data[1].type == 'figur' %}
-                        <div id="vis1" class="graph"></div>
-                        <script type="text/javascript">
-                            vegaEmbed("#vis1", {{ graph_data[1].data | safe}}, {
-                                "actions": false
-                            }).catch(error => showError(el, error));
-                        </script>
-                    {% else %}
-                        {{ graph_data[1].data | safe }}
-                    {% endif %}
-
-                {% endif %}
-
-
-            </div>
-
-        </div>
-
-
-        <br>
-        <div>
-            {%  if not form.is_submitted() %}
-                <b>{{ form.konklusion.label }}</b>:
+            {% if not form.is_submitted() %}
                 {{ form.konklusion(rows=10, style='width:100%') }}
             {% else %}
                 {{ konklusion }}
             {% endif %}
         </div>
 
-
-            <!--input type="button" value="Click" onclick="submitForms()" /-->
-            {%  if not form.is_submitted() %}
-                <div>{{ form.submit() }}</div>
-            {% endif %}
+        {% if not form.is_submitted() %}
+            <div>{{ form.submit() }}</div>
+        {% endif %}
     </form>
 
 
 </div>
-
 <section class="section">
     <div class="container">
         <footer class="footer">
@@ -134,8 +90,5 @@
 
     </div>
 </section>
-
-
 </body>
-
 </html>
