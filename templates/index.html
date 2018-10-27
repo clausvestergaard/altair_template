@@ -12,9 +12,6 @@
 {{ pagedown.include_pagedown() }}
 <body>
 
-<div class="progress-container">
-    <div class="progress-bar" id="myBar"></div>
-</div>
 <div style="width: 500px;">
 
     <form method="POST">
@@ -23,9 +20,9 @@
 
         <!-- TEKSTFELT 1 -->
         <div>
-            {% if data == None %}
-                <b>{{ form.tekstfelt1.label }}</b>:
-                {{ form.tekstfelt1(rows=10, style='width:100%') }}
+            {%  if not form.is_submitted() %}
+                <b>{{ form.form0.label }}</b>:
+                {{ form.form0(rows=10, style='width:100%') }}
             {% else %}
                 {{ text[0] }}
             {% endif %}
@@ -50,15 +47,14 @@
 
         </div>
 
+        {{ form.hidden_tag() }}
 
-        <br>
 
-
-        <!-- TEKSTFELT 2 -->
+        <!-- TEKSTFELT 1 -->
         <div>
-            {% if data == None %}
-                <b>{{ form.tekstfelt2.label }}</b>:
-                {{ form.tekstfelt2(rows=10, style='width:100%') }}
+            {%  if not form.is_submitted() %}
+                <b>{{ form.form1.label }}</b>:
+                {{ form.form1(rows=10, style='width:100%') }}
             {% else %}
                 {{ text[1] }}
             {% endif %}
@@ -85,11 +81,8 @@
 
 
         <br>
-
-
-        <!-- KONKLUSION -->
         <div>
-            {% if data == None %}
+            {%  if not form.is_submitted() %}
                 <b>{{ form.konklusion.label }}</b>:
                 {{ form.konklusion(rows=10, style='width:100%') }}
             {% else %}
@@ -97,9 +90,11 @@
             {% endif %}
         </div>
 
-        {% if data == None %}
-            <div>{{ form.submit() }}</div>
-        {% endif %}
+
+            <!--input type="button" value="Click" onclick="submitForms()" /-->
+            {%  if not form.is_submitted() %}
+                <div>{{ form.submit() }}</div>
+            {% endif %}
     </form>
 
 
@@ -140,19 +135,6 @@
     </div>
 </section>
 
-
-<script> <!-- PROGRESS BAR -->
-window.onscroll = function () {
-    myFunction()
-};
-
-function myFunction() {
-    var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    var scrolled = (winScroll / height) * 100;
-    document.getElementById("myBar").style.width = scrolled + "%";
-}
-</script> <!-- PROGRESS BAR END -->
 
 </body>
 

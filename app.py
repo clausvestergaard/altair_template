@@ -35,34 +35,37 @@ class PageDownFormExample(FlaskForm):
     textfield = PageDownField('Enter your markdown')
     submit = SubmitField('Submit')
 
-class PageDownFormSubmit(FlaskForm):
-    submit = SubmitField('Submit')
 
+def build_form(form_json):
+  class DynamicForm(FlaskForm):
+      submit = SubmitField('Submit')
+      konklusion = PageDownField('Konklusion')
+      pass
+  d = DynamicForm
 
+  for i in form_json:
+      setattr(d, i, PageDownField())
+  return d()
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    formsubmit = PageDownFormSubmit()
-    form = {f'form{i}': PageDownFormExample(f'form{i}') for i in range(len(import_data()))}
+    form = build_form(["form0", "form1"])
 
     graph_data = import_data()
-    for i in range(len(graph_data)):
-        form[f'form{i}'].textfield.name = f'textfield_{i}'
-    data = None
-    text = []
+
+    text = None
     konklusion = None
 
-    if formsubmit.validate_on_submit():
-
+    if form.validate_on_submit():
+        text = []
+        konklusion = Markup(markdown.markdown(form.konklusion.data))
         for i in range(len(graph_data)):
-                data = form
-                text.append(Markup(markdown.markdown(data[f'form{i}'].textfield.data)))
+            text.append(Markup(markdown.markdown(form[f'form{i}'].data)))
     else:
-        for i in range(len(graph_data)):
-            form[f'form{i}'].textfield.data = (f'form{i}')
-
-    return render_template('index_ite.html', form=form, data=data, graph_data=graph_data, text=text, konklusion=konklusion, formsubmit=formsubmit)
+        for i in ["form0", "form1"]:
+            form[i].data = (i)
+    return render_template('index.html', form=form, graph_data=graph_data, text=text, konklusion=konklusion)
 
 
 if __name__ == '__main__':
