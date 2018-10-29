@@ -6,8 +6,14 @@ import pathlib
 class ExportingData():
     exporting = []
     data_Keys = ['type', 'data']
-    directory_path = f'{pathlib.Path(os.getcwd()).joinpath("obj")}'
-    file_path = f'{directory_path.joinpath("data.json")}'
+    directory_path = pathlib.Path(os.getcwd()).joinpath("obj")
+    file_path = directory_path.joinpath("data.json")
+
+    def __init__(self):
+        try:
+            assert os.path.isdir(self.directory_path)
+        except AssertionError:
+            print(f'The directory {self.directory_path} does not exist.')
 
     def add_data(self, data_type: str, data_values: str):
         """
@@ -50,15 +56,10 @@ class ExportingData():
         except AssertionError:
             print(
                 f'Inputs to the method {ExportingData.__name__}.{ExportingData.add_data.__name__} have to be strings.')
+            return False
         return True
 
     def validate_output(self):
-        try:
-            assert os.path.isdir(self.directory_path)
-        except AssertionError:
-            print(f'The directory {self.directory_path} does not exist.')
-            return False
-
         try:
             assert isinstance(self.exporting, list)
         except AssertionError:
