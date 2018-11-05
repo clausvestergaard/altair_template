@@ -66,8 +66,10 @@ def index():
             text.append(Markup(markdown(form[f'form{i}'].data)))
         conclusion = Markup(markdown(form.conclusion.data))
     else:
-        for i in form_fields:
-            form[i].data = ('Write text in **markdown**')
+        for idx, i in enumerate(form_fields):
+            if not graph_data[idx]["text"]:
+                graph_data[idx]["text"] = 'Default text'
+            form[i].data = graph_data[idx]["text"]
     return render_template('index.html', form=form, graph_data=graph_data, text=text, conclusion=conclusion,
                            form_fields=form_fields)
 

@@ -5,7 +5,7 @@ import pathlib
 
 class ExportingData():
     exporting = []
-    data_Keys = ['type', 'data']
+    data_Keys = ['type', 'data', 'text']
     directory_path = pathlib.Path(os.getcwd()).joinpath("obj")
     file_path = directory_path.joinpath("data.json")
 
@@ -15,7 +15,7 @@ class ExportingData():
         except AssertionError:
             print(f'The directory {self.directory_path} does not exist.')
 
-    def add_data(self, data_type: str, data_values: str):
+    def add_data(self, data_type: str, data_values: str, data_text: str):
         """
         Function for adding data to the object prior to exporting the data and running the app.
         Basically just validating input and appending dictionaries to the list 'exporting'.
@@ -36,9 +36,9 @@ class ExportingData():
         >>> ED.add_data(data_type='tabel', data_values=cars.head().to_html(classes='table is-striped is-hoverable')
         """
 
-        self.validate_input(data_type, data_values)
+        self.validate_input(data_type, data_values, data_text)
 
-        _data = {'type': data_type, 'data': data_values}
+        _data = {'type': data_type, 'data': data_values, 'text': data_text}
         self.exporting.append(_data)
         return self
 
@@ -47,13 +47,15 @@ class ExportingData():
         with open(self.file_path, 'w') as f:
             json.dump(self.exporting, f)
 
-    def validate_input(self, data_type, data_values) -> bool:
+    def validate_input(self, data_type, data_values, data_text) -> bool:
         try:
             assert isinstance(data_type, str)
             assert isinstance(data_values, str)
+            assert isinstance(data_text, str)
         except AssertionError:
-            raise TypeError('Both data_type and data_values have to be of type str. '
-                            f'Input was data_type: {type(data_type)} and data_values: {type(data_values)}.')
+            raise TypeError('All inputs have to be of type str. '
+                            f'Input was data_type: {type(data_type)}, data_values: {type(data_values)}'
+                            f' and data_text: {type(data_text)}.')
 
     def validate_output(self):
         try:
