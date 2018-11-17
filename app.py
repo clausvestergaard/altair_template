@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Markup
+from flask import Flask, render_template, Markup, request
 from flask_wtf import FlaskForm
 from flask_pagedown import PageDown
 from flask_pagedown.fields import PageDownField
@@ -36,6 +36,13 @@ app.config['SECRET_KEY'] = 'secret!'
 PageDown(app)
 
 
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+
+
 def build_form(data_json):
     class DynamicForm(FlaskForm):
         submit = SubmitField('Submit')
@@ -65,6 +72,7 @@ def index():
         for i in range(len(graph_data)):
             text.append(Markup(markdown(form[f'form{i}'].data)))
         conclusion = Markup(markdown(form.conclusion.data))
+        shutdown_server()
     else:
         for idx, i in enumerate(form_fields):
             if not graph_data[idx]["text"]:
